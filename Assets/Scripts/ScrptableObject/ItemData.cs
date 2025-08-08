@@ -41,15 +41,6 @@ public class ItemData : ScriptableObject
     [Header("Consumable")]
     public ItemDataConsumbale[] consumbales; // 소비 아이템 정보 (Health, Hunger 등) 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Equip")]
+    public GameObject equipPrefab; // 장착 프리팹
 }

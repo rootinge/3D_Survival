@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,8 +17,9 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot;
     public float lookSensitivity;
     private Vector2 mouseDelta;
+    public bool canLook = true;
 
-
+    public Action inventory; // 인벤토리 델리게이트
 
     private Rigidbody _rigidbody;
 
@@ -39,7 +41,8 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-        cameraLook();
+        if(canLook)
+            cameraLook();
     }
 
     void Move()
@@ -105,5 +108,21 @@ public class PlayerController : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            inventory?.Invoke(); // 인벤토리 델리게이트 호출
+            ToggleCursor(); // 커서 토글
+        }
+    }
+
+    void ToggleCursor()
+    {
+        bool toggle = Cursor.lockState == CursorLockMode.Locked; 
+        Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
+        canLook = !toggle; 
     }
 }

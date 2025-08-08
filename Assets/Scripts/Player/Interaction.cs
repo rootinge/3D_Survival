@@ -60,6 +60,7 @@ public class Interaction : MonoBehaviour
         promptText.text = curInteractable.GetInteractPrompt(); // 프롬프트 텍스트 설정
     }
 
+    // 상호작용 입력 처리 메서드
     public void OnInteractInput(InputAction.CallbackContext context)
     {
         if(context.phase == InputActionPhase.Started && curInteractable !=null)
