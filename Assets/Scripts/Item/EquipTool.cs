@@ -7,6 +7,7 @@ public class EquipTool : Equip
     public float attackRate; // 공격 속도
     private bool attacking; // 공격 중인지 여부
     public float attackDistance; // 공격 거리
+    public float useStamina; // 공격 시 소모되는 스태미너
 
     [Header("Resource Gathering")]
     public bool doesGatherResources; // 자원 수집 여부
@@ -28,9 +29,12 @@ public class EquipTool : Equip
     {
         if(!attacking)
         {
-            attacking = true;
-            animator.SetTrigger("Attack");
-            Invoke("OnCanAttack", attackRate);
+            if (CharacterManager.Instance.Player.condition.UseStamina(useStamina))
+            {
+                attacking = true;
+                animator.SetTrigger("Attack");
+                Invoke("OnCanAttack", attackRate);
+            }
         }
     }
 
@@ -51,6 +55,11 @@ public class EquipTool : Equip
             {
                 // 자원 수집
                 resource.Gather(hit.point, hit.normal);
+            }
+
+            if (dosesDealDamage && hit.collider.TryGetComponent(out NPC npc))
+            {
+                npc.TakePhysicalDamage(damage);
             }
         }
     }
