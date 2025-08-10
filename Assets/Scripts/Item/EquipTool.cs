@@ -16,10 +16,12 @@ public class EquipTool : Equip
     public int damage; // 공격력
 
     private Animator animator;
+    private Camera camera;
 
     void Start()
     {
         animator = GetComponent<Animator>();
+        camera = Camera.main; // 메인 카메라를 가져옴
     }
 
     public override void OnAttackInput()
@@ -35,5 +37,21 @@ public class EquipTool : Equip
     void OnCanAttack()
     {
         attacking = false;
+    }
+
+    public void OnHit()
+    {
+        Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0)); // 화면 중앙에서 Ray 생성
+
+        RaycastHit hit;
+
+        if(Physics.Raycast(ray, out hit, attackDistance))
+        {
+            if(doesGatherResources && hit.collider.TryGetComponent(out Resource resource))
+            {
+                // 자원 수집
+                resource.Gather(hit.point, hit.normal);
+            }
+        }
     }
 }
