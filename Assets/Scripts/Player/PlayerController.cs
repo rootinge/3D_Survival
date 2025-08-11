@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public Action inventory; // 인벤토리 델리게이트
 
     private Rigidbody _rigidbody;
+    public bool blockMovement = false; // 외부에서 움직임을 막기 위한 플래그
 
     private void Awake()
     {
@@ -31,18 +32,25 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        blockMovement = false; // 초기에는 움직임이 막혀있지 않음
     }
 
 
     void FixedUpdate()
     {
-        Move();
+        if (blockMovement)
+        {
+            blockMovement = !IsGrounded();
+            return; // 움직임이 막혀있으면 이동하지 않음
+        }
+
+            Move();
     }
 
     private void LateUpdate()
     {
         if(canLook)
-            cameraLook();
+            cameraLook(); // 
     }
 
     void Move()
@@ -125,4 +133,6 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle; 
     }
+
+
 }
