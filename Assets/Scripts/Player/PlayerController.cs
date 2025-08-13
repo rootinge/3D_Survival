@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseDelta;
     public bool canLook = true;
 
+    public GameObject ThirdPersonCamera;
+    
     public Action inventory; // 인벤토리 델리게이트
 
     private Rigidbody _rigidbody;
@@ -27,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        ThirdPersonCamera.SetActive(false);
     }
 
     void Start()
@@ -134,5 +137,11 @@ public class PlayerController : MonoBehaviour
         canLook = !toggle; 
     }
 
-
+    public void OnThirdPerson(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            ThirdPersonCamera.SetActive(!ThirdPersonCamera.activeSelf);
+        }
+    }
 }
